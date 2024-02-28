@@ -39,13 +39,30 @@ recognition.interimResults = true;
 
 let p = document.createElement( 'p' );
 
+
+const vibrateFun = async ( char ) =>
+{
+  if ( char == "-" )
+  {
+    navigator.vibrate( charVibrate[ "-" ] );
+    console.log(500)
+    await new Promise( ( resolve ) => setTimeout( resolve, charVibrate[ "-" ] ) );
+  } else if ( char == "." )
+  {
+    navigator.vibrate( charVibrate[ "." ] );
+    console.log(200)
+    await new Promise( ( resolve ) => setTimeout( resolve, charVibrate[ "." ] ) );
+  }
+};
+
+
 recognition.addEventListener( 'result', ( e ) =>
 {
   texts.appendChild( p );
   const text = Array.from( e.results )
     .map( result => result[ 0 ] )
     .map( result => result.transcript )
-    .join('');
+    .join( '' );
 
   p.innerText = text;
   finalResult = text;
@@ -69,23 +86,12 @@ recognition.addEventListener( 'end', () =>
     }
   }
   console.log( answer );
-  answer.forEach( ( e, index ) =>
+  answer.forEach( ( e ) =>
   {
     var charArr = e.split( "" );
-    charArr.forEach( ( char, innerIndex ) =>
+    charArr.forEach( ( char ) =>
     {
-      setTimeout( () =>
-      {
-        if ( char == "-" )
-        {
-          navigator.vibrate( charVibrate[ "-" ] );
-          console.log( charVibrate[ "-" ] );
-        } else if ( char == "." )
-        {
-          navigator.vibrate( charVibrate[ "." ] );
-          console.log( charVibrate[ "." ] );
-        }
-      }, ( charVibrate[ "-" ] + charVibrate[ "." ] ) * index + charVibrate[ "." ] * innerIndex );
+      vibrateFun( char );
     } );
   } );
 } );

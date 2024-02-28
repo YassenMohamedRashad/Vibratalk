@@ -1,5 +1,6 @@
 const texts = document.querySelector( '.texts' );
 const startBtn = document.getElementById( 'startBtn' );
+const checkBtn = document.getElementById( 'checkBtn' );
 const endBtn = document.getElementById( 'endBtn' );
 
 // morse code for each letter
@@ -72,19 +73,19 @@ recognition.addEventListener( 'end', () =>
   answer.forEach( ( e ) =>
   {
     var charArr = e.split( "" );
-    charArr.forEach( (char) =>
+    charArr.forEach( ( char ) =>
     {
       if ( char == "-" )
       {
-        navigator.vibrate( charVibrate[ "-" ] )
-        console.log(charVibrate["-"])
+        navigator.vibrate( charVibrate[ "-" ] );
+        console.log( charVibrate[ "-" ] );
       }
       else if ( char == "." )
       {
-        navigator.vibrate( charVibrate[ "." ] )
-        console.log(charVibrate["."])
+        navigator.vibrate( charVibrate[ "." ] );
+        console.log( charVibrate[ "." ] );
       }
-    })
+    } );
   } );
 } );
 
@@ -93,7 +94,10 @@ startBtn.addEventListener( 'click', () =>
   recognition.start();
 } );
 
-
+checkBtn.addEventListener( 'click',() =>
+{
+  navigator.vibrate(500)
+})
 
 // Object.keys(cipher).forEach(function(key) {
 //   var value = cipher[key];

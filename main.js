@@ -25,6 +25,25 @@ for ( var i = 65; i <= 90; i++ )
   uppercaseAlphabets.push( String.fromCharCode( i ) );
 }
 
+const vibrateFun = ( char, index ) =>
+{
+  setTimeout( () =>
+  {
+    if ( char == "-" )
+    {
+      navigator.vibrate( charVibrate[ "-" ] );
+      console.log( charVibrate[ "-" ] );
+    }
+    else if ( char == "." )
+    {
+      navigator.vibrate( charVibrate[ "." ] );
+      console.log( charVibrate[ "." ] );
+    }
+  }, 700 * index );
+
+
+};
+
 // will contain the final morse code for the recognised text, and " " for the space between talking
 var answer = [];
 
@@ -38,35 +57,6 @@ const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 
 let p = document.createElement( 'p' );
-
-
-const vibrateFun = async ( morseChar ) =>
-{
-  const dotDuration = 200; // milliseconds
-  const dashDuration = 500; // milliseconds
-
-  for ( let i = 0; i < morseChar.length; i++ )
-  {
-    let char = morseChar[ i ];
-    let duration;
-    if ( char === "." )
-    {
-      duration = dotDuration;
-    } else if ( char === "-" )
-    {
-      duration = dashDuration;
-    }
-    if ( duration )
-    {
-      navigator.vibrate( duration );
-      await console.log( `Vibrating for ${ char }` );
-      await new Promise( ( resolve ) => setTimeout( resolve, duration + 100 ) ); // Adding a small delay between vibrations
-    }
-  }
-};
-
-
-
 
 recognition.addEventListener( 'result', ( e ) =>
 {
@@ -101,10 +91,10 @@ recognition.addEventListener( 'end', () =>
   answer.forEach( ( e ) =>
   {
     var charArr = e.split( "" );
-    charArr.forEach( ( char ) =>
+    for ( let index = 0; index < charArr.length; index++ )
     {
-      vibrateFun( char );
-    } );
+      vibrateFun( charArr[ index ], index );
+    }
   } );
 } );
 

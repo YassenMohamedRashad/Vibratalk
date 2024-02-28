@@ -40,25 +40,32 @@ recognition.interimResults = true;
 let p = document.createElement( 'p' );
 
 
-const vibrateFun = ( char ) =>
+const vibrateFun = async ( morseChar ) =>
 {
-  const vibrateTime = char === '.' ? charVibrate[ '.' ] : charVibrate[ '-' ];
-  const interval = 100; // Duration of each vibration "unit"
+  const dotDuration = 200; // milliseconds
+  const dashDuration = 500; // milliseconds
 
-  let count = 0;
-  const vibration = setInterval( () =>
+  for ( let i = 0; i < morseChar.length; i++ )
   {
-    navigator.vibrate( interval );
-    count++;
-
-    if ( count >= vibrateTime / interval )
+    let char = morseChar[ i ];
+    let duration;
+    if ( char === "." )
     {
-      clearInterval( vibration );
+      duration = dotDuration;
+    } else if ( char === "-" )
+    {
+      duration = dashDuration;
     }
-  }, interval + 10 ); // Added a small delay to account for timing inaccuracies
-
-  return new Promise( resolve => setTimeout( resolve, vibrateTime ) );
+    if ( duration )
+    {
+      navigator.vibrate( duration );
+      await console.log( `Vibrating for ${ char }` );
+      await new Promise( ( resolve ) => setTimeout( resolve, duration + 100 ) ); // Adding a small delay between vibrations
+    }
+  }
 };
+
+
 
 
 recognition.addEventListener( 'result', ( e ) =>

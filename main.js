@@ -40,19 +40,24 @@ recognition.interimResults = true;
 let p = document.createElement( 'p' );
 
 
-const vibrateFun = async ( char ) =>
+const vibrateFun = ( char ) =>
 {
-  if ( char == "-" )
+  const vibrateTime = char === '.' ? charVibrate[ '.' ] : charVibrate[ '-' ];
+  const interval = 100; // Duration of each vibration "unit"
+
+  let count = 0;
+  const vibration = setInterval( () =>
   {
-    navigator.vibrate( charVibrate[ "-" ] );
-    console.log(500)
-    await new Promise( ( resolve ) => setTimeout( resolve, charVibrate[ "-" ] ) );
-  } else if ( char == "." )
-  {
-    navigator.vibrate( charVibrate[ "." ] );
-    console.log(200)
-    await new Promise( ( resolve ) => setTimeout( resolve, charVibrate[ "." ] ) );
-  }
+    navigator.vibrate( interval );
+    count++;
+
+    if ( count >= vibrateTime / interval )
+    {
+      clearInterval( vibration );
+    }
+  }, interval + 10 ); // Added a small delay to account for timing inaccuracies
+
+  return new Promise( resolve => setTimeout( resolve, vibrateTime ) );
 };
 
 

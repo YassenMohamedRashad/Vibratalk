@@ -70,23 +70,26 @@ recognition.addEventListener( 'end', () =>
     }
   }
   console.log( answer );
-  answer.forEach( ( e ) =>
+  answer.forEach( ( e, index ) =>
   {
     var charArr = e.split( "" );
-    charArr.forEach( ( char ) =>
+    charArr.forEach( ( char, innerIndex ) =>
     {
-      if ( char == "-" )
+      setTimeout( () =>
       {
-        navigator.vibrate( charVibrate[ "-" ] );
-        console.log( charVibrate[ "-" ] );
-      }
-      else if ( char == "." )
-      {
-        navigator.vibrate( charVibrate[ "." ] );
-        console.log( charVibrate[ "." ] );
-      }
+        if ( char == "-" )
+        {
+          navigator.vibrate( charVibrate[ "-" ] );
+          console.log( charVibrate[ "-" ] );
+        } else if ( char == "." )
+        {
+          navigator.vibrate( charVibrate[ "." ] );
+          console.log( charVibrate[ "." ] );
+        }
+      }, ( charVibrate[ "-" ] + charVibrate[ "." ] ) * index + charVibrate[ "." ] * innerIndex );
     } );
   } );
+
 } );
 
 startBtn.addEventListener( 'click', () =>
@@ -94,10 +97,10 @@ startBtn.addEventListener( 'click', () =>
   recognition.start();
 } );
 
-checkBtn.addEventListener( 'click',() =>
+checkBtn.addEventListener( 'click', () =>
 {
-  navigator.vibrate(500)
-})
+  navigator.vibrate( 500 );
+} );
 
 // Object.keys(cipher).forEach(function(key) {
 //   var value = cipher[key];

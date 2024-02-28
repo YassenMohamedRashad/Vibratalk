@@ -4,7 +4,7 @@ const checkBtn = document.getElementById( 'checkBtn' );
 const endBtn = document.getElementById( 'endBtn' );
 
 // morse code for each letter
-var cipher = {
+const cipher = {
   'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..',
   'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
   'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
@@ -14,20 +14,20 @@ var cipher = {
   'Y': '-.--', 'Z': '--..'
 };
 
-var charVibrate = {
+const charVibrate = {
   ".": 200,
   "-": 500
 };
 
 // alphapets uppercase
-var uppercaseAlphabets = [ " " ];
-for ( var i = 65; i <= 90; i++ )
+const uppercaseAlphabets = [];
+for ( let i = 65; i <= 90; i++ )
 {
   uppercaseAlphabets.push( String.fromCharCode( i ) );
 }
 
 // will contain the final morse code for the recognised text, and " " for the space between talking
-var answer = [];
+const answer = [];
 
 // the final text for the user will be here
 let finalResult = "";
@@ -52,7 +52,6 @@ recognition.addEventListener( 'result', ( e ) =>
   finalResult = text;
 } );
 
-
 recognition.addEventListener( 'end', () =>
 {
   recognition.stop();
@@ -60,7 +59,7 @@ recognition.addEventListener( 'end', () =>
   {
     if ( uppercaseAlphabets.includes( finalResult[ i ].toUpperCase() ) )
     {
-      if ( cipher[ finalResult[ i ].toUpperCase() ] == undefined )
+      if ( cipher[ finalResult[ i ].toUpperCase() ] === undefined )
       {
         answer.push( " " );
       } else
@@ -70,26 +69,31 @@ recognition.addEventListener( 'end', () =>
     }
   }
   console.log( answer );
-  answer.forEach( ( e, index ) =>
+
+  // Function to vibrate a single character in Morse code
+  function vibrateMorseCode ( char )
   {
-    var charArr = e.split( "" );
-    charArr.forEach( ( char, innerIndex ) =>
+    const charArr = char.split( "" );
+    charArr.forEach( ( symbol, index ) =>
     {
       setTimeout( () =>
       {
-        if ( char == "-" )
+        if ( symbol === "-" )
         {
           navigator.vibrate( charVibrate[ "-" ] );
-          console.log( charVibrate[ "-" ] );
-        } else if ( char == "." )
+        } else if ( symbol === "." )
         {
           navigator.vibrate( charVibrate[ "." ] );
-          console.log( charVibrate[ "." ] );
         }
-      }, ( charVibrate[ "-" ] + charVibrate[ "." ] ) * index + charVibrate[ "." ] * innerIndex );
+      }, index * ( charVibrate[ "-" ] + charVibrate[ "." ] ) );
     } );
-  } );
+  }
 
+  // Loop through each Morse code sequence and vibrate
+  answer.forEach( ( e ) =>
+  {
+    vibrateMorseCode( e );
+  } );
 } );
 
 startBtn.addEventListener( 'click', () =>
@@ -101,8 +105,3 @@ checkBtn.addEventListener( 'click', () =>
 {
   navigator.vibrate( 500 );
 } );
-
-// Object.keys(cipher).forEach(function(key) {
-//   var value = cipher[key];
-//   console.log("Key:", key, "Value:", value);
-// });
